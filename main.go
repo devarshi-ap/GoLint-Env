@@ -22,18 +22,21 @@ func main() {
 
 	scanner := bufio.NewScanner(envFile);
 	numL := 1;
+	lastLine := "";
 
 	for scanner.Scan() {
 		line := scanner.Text();
+		lastLine = line;
 
 		if isComment(line) {
 			// Validate Comment
 			fmt.Printf("Comment --> %v\n\n", line);
-			utils.Validate(line, numL);
+			utils.ValidateComment(line, numL);
 
 		} else if isLine(line) {
 			// Validate Key-Value Pair
 			fmt.Printf("K-V Pair --> %v\n\n", line);
+			utils.ValidatePairline(line, numL);
 
 		}  else if len(line) == 0 {
 			// Space (do nothing)
@@ -45,6 +48,11 @@ func main() {
 		}
 		
 		numL++;
+	}
+
+	if len(lastLine) == 0 {
+		var err *utils.Error = utils.NewError("", "", 1);
+		utils.Error_Stack.Push(*err);
 	}
 
 	fmt.Printf("---------------------------------\n\n")
