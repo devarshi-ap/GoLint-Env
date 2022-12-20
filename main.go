@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"golint-env/utils"
 );
 
 const filename string = "./assets/.env";
@@ -20,12 +21,15 @@ func main() {
 	// Buffer Scanner Scans until EOF
 
 	scanner := bufio.NewScanner(envFile);
+	numL := 1;
+
 	for scanner.Scan() {
-		var line string = scanner.Text();
-		
+		line := scanner.Text();
+
 		if isComment(line) {
 			// Validate Comment
 			fmt.Printf("Comment --> %v\n\n", line);
+			utils.Validate(line, numL);
 
 		} else if isLine(line) {
 			// Validate Key-Value Pair
@@ -39,7 +43,12 @@ func main() {
 			// Process Undefined
 			fmt.Printf("Undefined\n\n");
 		}
+		
+		numL++;
 	}
+
+	fmt.Printf("---------------------------------\n\n")
+	utils.Error_Stack.Print();
 }
 
 func isComment(line string) bool {
