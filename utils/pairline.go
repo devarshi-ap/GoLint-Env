@@ -57,6 +57,15 @@ func ValidatePairline(pairline string, line int) {
 		}
 		Error_Stack.Push(err);
 	}
+
+	if hasLowercaseKey(key) {
+		var err = Error{
+			name: "LowercaseInKey",
+			description: "<key (" + key + ") has lowercase character; must be uppercase>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
 }
 
 func hasDuplicate(key string) (string, bool) {
@@ -82,6 +91,12 @@ func hasCorrectDelimiter(key string) bool {
 }
 
 func hasCorrectLeadingChar(key string) bool {
-	match, _ := regexp.MatchString(`^[A-Z_]+$`, key);
+	firstChar := string(key[0]);
+	match, _ := regexp.MatchString(`^[A-Za-z_]+$`, firstChar);
+	return match;
+}
+
+func hasLowercaseKey(key string) bool {
+	match, _ := regexp.MatchString(`[a-z]{1,}`, key);
 	return match;
 }
