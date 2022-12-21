@@ -64,5 +64,5 @@ func isComment(line string) bool {
 }
 
 func isLine(line string) bool {
-	return !isComment(line) && strings.Contains(line, "=")
+	return !isComment(line) && strings.Contains(line, "=");
 }
