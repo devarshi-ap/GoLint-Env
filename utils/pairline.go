@@ -2,6 +2,7 @@ package utils
 
 import (
 	"strings"
+	"regexp"
 )
 
 func ValidatePairline(pairline string, line int) {
@@ -19,7 +20,14 @@ func ValidatePairline(pairline string, line int) {
 		Pairs_Map[key] = value;
 	}
 
-	
+	if isKeyValueless(value) {
+		var err = Error{
+			name: "ValuelessKey",
+			description: "<key (" + key + ") is invalid or valueless (" + value + ")>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
 }
 
 func hasDuplicate(key string) (string, bool) {
@@ -28,4 +36,13 @@ func hasDuplicate(key string) (string, bool) {
 	} else {
 		return "", false;
 	}
+}
+
+func isKeyValueless(val string) bool {
+	if len(val) >= 3 && ((string(val[0]) == "'" && string(val[len(val)-1]) == "'") || (string(val[0]) == "\"" && string(val[len(val)-1]) == "\"")) {
+		return false;
+	}
+	var rgx = regexp.MustCompile(`^[^a-zA-Z0-9]+$`)
+	new_str := rgx.ReplaceAllString(val, ``)
+	return len(strings.TrimSpace(new_str)) == 0;
 }
