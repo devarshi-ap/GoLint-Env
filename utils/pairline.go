@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 func ValidatePairline(pairline string, line int) {
@@ -99,4 +100,13 @@ func hasCorrectLeadingChar(key string) bool {
 func hasLowercaseKey(key string) bool {
 	match, _ := regexp.MatchString(`[a-z]{1,}`, key);
 	return match;
+}
+
+func hasValidEqualSpacing(line string) bool {
+	if len(line) >= 3 {
+		idx := strings.Index(line, "=");
+		before, after := line[idx - 1], line[idx + 1];
+		return !(unicode.IsSpace(rune(before)) || unicode.IsSpace(rune(after)))
+	}
+	return true;
 }
