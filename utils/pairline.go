@@ -1,12 +1,14 @@
 package utils
 
 import (
-	"strings"
+	"fmt"
 	"regexp"
+	"strings"
 )
 
 func ValidatePairline(pairline string, line int) {
 	key, value, _ := strings.Cut(pairline, "=");
+	fmt.Println("key", key, "\nvalue", value);
 
 	if curr_val, b := hasDuplicate(key); b {
 		var err = Error{
@@ -20,10 +22,37 @@ func ValidatePairline(pairline string, line int) {
 		Pairs_Map[key] = value;
 	}
 
+	if len(strings.TrimSpace((key))) == 0 {
+		var err = Error{
+			name: "EmptyKey",
+			description: "<key is empty>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
+
 	if isKeyValueless(value) {
 		var err = Error{
 			name: "ValuelessKey",
 			description: "<key (" + key + ") is invalid or valueless (" + value + ")>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
+
+	if !hasCorrectDelimiter(key) {
+		var err = Error{
+			name: "IncorrectDelimiter",
+			description: "<key (" + key + ") has invalid delimiter; key must be uppercase & underscore-delimited>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
+
+	if !hasCorrectLeadingChar(key) {
+		var err = Error{
+			name: "IncorrectLeadingChar",
+			description: "<key (" + key + ") has invalid leading character; must start with underscore or uppercase letter>",
 			line: line,
 		}
 		Error_Stack.Push(err);
@@ -45,4 +74,14 @@ func isKeyValueless(val string) bool {
 	var rgx = regexp.MustCompile(`^[^a-zA-Z0-9]+$`)
 	new_str := rgx.ReplaceAllString(val, ``)
 	return len(strings.TrimSpace(new_str)) == 0;
+}
+
+func hasCorrectDelimiter(key string) bool {
+	match, _ := regexp.MatchString(`^[A-Z_]+$`, key);
+	return match;
+}
+
+func hasCorrectLeadingChar(key string) bool {
+	match, _ := regexp.MatchString(`^[A-Z_]+$`, key);
+	return match;
 }
