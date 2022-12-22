@@ -28,6 +28,3 @@ func (m *Map) containsKey(key string) bool {
 		return false;
 	}
 }
-
-// ACCESS --> Pairs_Map[key]
-// ADD --> Pairs_Map[key] = value
