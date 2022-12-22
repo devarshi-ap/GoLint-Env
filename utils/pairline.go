@@ -1,18 +1,16 @@
 package utils
 
 import (
-	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 	"unicode"
-	"sort"
 )
 
 var keys = []string{};
 
 func ValidatePairline(pairline string, line int) {
 	key, value, _ := strings.Cut(pairline, "=");
-	fmt.Println("key", key, "\nvalue", value);
 
 	if curr_val, b := hasDuplicate(key); b {
 		var err = Error{
@@ -89,6 +87,15 @@ func ValidatePairline(pairline string, line int) {
 		}
 		Error_Stack.Push(err);
 	}
+
+	if !hasValidQuotes(value) {
+		var err = Error{
+			name: "InvalidQuotes",
+			description: "<multiword values must be enclosed in even # of matching quotes; optionally applied to single-word values>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
 }
 
 func hasDuplicate(key string) (string, bool) {
@@ -135,4 +142,20 @@ func hasValidEqualSpacing(line string) bool {
 
 func AreKeysInOrder(s []string) bool {
 	return sort.StringsAreSorted(s);
+}
+
+func hasValidQuotes(value string) bool {
+	if strings.Contains(value, " ") {
+		// multiple words
+		// check if starts with "/' && has even # of occurrences
+		if (string(value[0]) == "\"" && string(value[len(value) - 1]) == "\"") || (string(value[0]) == "'" && string(value[len(value) - 1]) == "'") {
+			return strings.Count(value, "\"") % 2 == 0 && strings.Count(value, "'") % 2 == 0;
+		} else {
+			return false;
+		}
+	} else {
+		// single word
+		// straight check if even # of occurrences
+		return strings.Count(value, "\"") % 2 == 0 && strings.Count(value, "'") % 2 == 0
+	}
 }
