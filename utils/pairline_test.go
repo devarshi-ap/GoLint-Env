@@ -105,3 +105,24 @@ func TestHasValidEqualSpacing(t *testing.T) {
 		}
 	}
 }
+
+func TestHasValidQuotes(t *testing.T) {
+	cases := []struct {
+        value          	string
+        expectedOutput 	bool
+		}{
+		{"BAR BAR", false},
+		{"\"BAR'", false},
+		{"'B\"AR'", false},
+		{"'B AR\"", false},
+		{"BAR", true},
+		{"\"BAR BAR\"", true},
+		{"'BAR BAR'", true},
+    }
+
+	for _, c := range cases {
+		if output := hasValidQuotes(c.value); output != c.expectedOutput {
+			t.Errorf("incorrect output for `%s`: expected `%t` but got `%t`", c.value, c.expectedOutput, output)
+		}
+	}
+}
