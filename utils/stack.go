@@ -20,7 +20,7 @@ func (s *Stack) Print() {
 	fmt.Println();
 }
 
-// Push: append new value @ end of stack
+// Push: append new value @ end of stack (check if prev key is lexicographically smaller- in order)
 func (s *Stack) Push(e Error) {
 	*s = append(*s, e)
 }

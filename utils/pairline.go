@@ -5,7 +5,10 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+	"sort"
 )
+
+var keys = []string{};
 
 func ValidatePairline(pairline string, line int) {
 	key, value, _ := strings.Cut(pairline, "=");
@@ -21,6 +24,7 @@ func ValidatePairline(pairline string, line int) {
 	} else {
 		// add key-value pair to map
 		Pairs_Map[key] = value;
+		keys = append(keys, key);
 	}
 
 	if len(strings.TrimSpace((key))) == 0 {
@@ -67,6 +71,24 @@ func ValidatePairline(pairline string, line int) {
 		}
 		Error_Stack.Push(err);
 	}
+
+	if !hasValidEqualSpacing(pairline) {
+		var err = Error{
+			name: "InvalidEqualSpacing",
+			description: "<must have no spaces around equal sign; FOO=BAR>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
+
+	if !(AreKeysInOrder(keys)) {
+		var err = Error{
+			name: "UnorderedKeys",
+			description: "<Keys must be in ordered alphabetically; key (" + key + ") should be higher up>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
 }
 
 func hasDuplicate(key string) (string, bool) {
@@ -109,4 +131,8 @@ func hasValidEqualSpacing(line string) bool {
 		return !(unicode.IsSpace(rune(before)) || unicode.IsSpace(rune(after)))
 	}
 	return true;
+}
+
+func AreKeysInOrder(s []string) bool {
+	return sort.StringsAreSorted(s);
 }
