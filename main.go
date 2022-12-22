@@ -30,32 +30,38 @@ func main() {
 
 		if isComment(line) {
 			// Validate Comment
-			fmt.Printf("Comment --> %v\n\n", line);
 			utils.ValidateComment(line, numL);
 
 		} else if isLine(line) {
-			// Validate Key-Value Pair
-			fmt.Printf("K-V Pair --> %v\n\n", line);
+			// Key-Value Pair
 			utils.ValidatePairline(line, numL);
 
 		}  else if len(line) == 0 {
 			// Space (do nothing)
-			fmt.Printf("--\n\n")
+			_ = 0;
 
 		} else {
-			// Process Undefined
-			fmt.Printf("Undefined\n\n");
+			// Undefined
+			var err *utils.Error = utils.NewError(
+				"UndefinedLine",
+				"<undefined line could not be parsed>",
+				numL,
+			);
+			utils.Error_Stack.Push(*err);
 		}
 		
 		numL++;
 	}
 
 	if len(lastLine) == 0 {
-		var err *utils.Error = utils.NewError("", "", 1);
+		var err *utils.Error = utils.NewError(
+			"EndingBlankLine",
+			"<file ends in blank link>",
+			numL,
+		);
 		utils.Error_Stack.Push(*err);
 	}
 
-	fmt.Printf("---------------------------------\n\n")
 	utils.Error_Stack.Print();
 }
 
