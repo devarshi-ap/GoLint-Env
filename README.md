@@ -94,7 +94,7 @@
   FOO_BAR=FOOBAR
   ```
   
-- ***Invalid Quotes*** - detects if a value has non-matching quotes (if any):
+- ***✅ Invalid Quotes*** - detects if a value has non-matching quotes (if any):
   
   ```textile
   ❌ Wrong
@@ -120,18 +120,6 @@
   FOO=BAR
   ```
   
-- ***Invalid Substitution Key*** - detects invalid substitutions on key assignments:
-  
-  ```textile
-  ❌ Wrong
-  ABC=${BAR
-  FOO="$BAR}"
-  
-  ✅ Correct
-  ABC=${BAR}
-  FOO="$BAR"
-  ```
-  
 - ***✅ Incorrectly-Spaced Comments*** - comments should be preceded with a space:
   
   ```textile
@@ -144,7 +132,7 @@
   FOO=BAR
   ```
   
-- ***(✅ comments) Trailing Whitespace*** - detects if a line has trailing whitespace
+- ***✅ Trailing Whitespace*** - detects if a line has trailing whitespace
   
   ```textile
   ❌ Wrong
@@ -154,7 +142,7 @@
   FOO=BAR
   ```
   
-- ***Unordered Key*** - detects if a key is not alphabetically ordered:
+- ***✅ Unordered Key*** - detects if a key is not alphabetically ordered:
   
   ```textile
   ❌ Wrong
