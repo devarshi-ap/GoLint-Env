@@ -61,6 +61,15 @@ func ValidatePairline(pairline string, line int) {
 		Error_Stack.Push(err);
 	}
 
+	if hasTrailingSpace(value) {
+		var err = Error {
+			name: "ValueTrailingSpace",
+			description: "<value has trailing space>",
+			line: line,
+		}
+		Error_Stack.Push(err);
+	}
+
 	if hasLowercaseKey(key) {
 		var err = Error{
 			name: "LowercaseInKey",
@@ -126,6 +135,11 @@ func hasCorrectLeadingChar(key string) bool {
 	return match;
 }
 
+func hasTrailingSpace(value string) bool {
+	lastChar := value[len(value) - 1];
+	return unicode.IsSpace(rune(lastChar));
+}
+
 func hasLowercaseKey(key string) bool {
 	match, _ := regexp.MatchString(`[a-z]{1,}`, key);
 	return match;
@@ -145,7 +159,7 @@ func AreKeysInOrder(s []string) bool {
 }
 
 func hasValidQuotes(value string) bool {
-	if strings.Contains(value, " ") {
+	if strings.Contains(value, " ") && strings.Index(value, " ") != len(value)-1 {
 		// multiple words
 		// check if starts with "/' && has even # of occurrences
 		if (string(value[0]) == "\"" && string(value[len(value) - 1]) == "\"") || (string(value[0]) == "'" && string(value[len(value) - 1]) == "'") {
