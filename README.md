@@ -1,4 +1,5 @@
 # .env linter
+[![Build & Test](https://github.com/devarshi-ap/GoLint-Env/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/devarshi-ap/GoLint-Env/actions/workflows/test.yml)
 
 ---
 
