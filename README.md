@@ -166,15 +166,3 @@
   FOO=BAR
   F=BAR
   ```
-  
-
-***`golint-env compare`*** - compare 2 `.env` files w/ each other & output difference
-
-```bash
-$ golint-env compare .env .env.example
-
-Comparing .env
-Comparing .env.example
-.env is missing keys: BAR
-.env.example is missing keys: FOO
-```
