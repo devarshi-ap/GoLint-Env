@@ -3,6 +3,26 @@
 
 ---
 
+##### Usage
+1. Ensure you have go installed
+2. Clone this repo
+3. Paste the contents of .env you wish to lint inside ./assets/.env
+4. Run the linter with:
+```bash
+# ensure unit test cases pass
+go test
+# build executable
+go build -v ./...
+
+# lint
+go run ./main.go
+# lint optionally by running executable directly:
+./main.go
+
+```
+
+---
+
 ##### 💭What is a .env file ?
 
 - .env (or dotenv) files are simple text files containing a project’s env-vars.
